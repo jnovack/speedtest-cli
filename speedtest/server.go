@@ -2,11 +2,11 @@ package speedtest
 
 import (
 	"errors"
-	"sort"
 	"fmt"
-	"time"
-	"net/url"
 	"log"
+	"net/url"
+	"sort"
+	"time"
 )
 
 type ServerID uint64
@@ -65,7 +65,7 @@ func (servers *Servers) Find(id ServerID) *Server {
 			return server
 		}
 	}
-	return nil;
+	return nil
 }
 
 func (servers *Servers) Len() int {
@@ -90,7 +90,7 @@ func (servers *Servers) Less(i, j int) bool {
 func (servers *Servers) Swap(i, j int) {
 	temp := servers.List[i]
 	servers.List[i] = servers.List[j]
-	servers.List[j] = temp;
+	servers.List[j] = temp
 }
 
 func (servers *Servers) truncate(max int) *Servers {

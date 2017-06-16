@@ -1,9 +1,9 @@
 package speedtest
 
 import (
-	"time"
-	"strings"
 	"sort"
+	"strings"
+	"time"
 )
 
 const DefaultLatencyMeasureTimes = 4
@@ -42,7 +42,7 @@ func (servers *serverLatencies) Less(i, j int) bool {
 func (servers *serverLatencies) Swap(i, j int) {
 	temp := servers.List[i]
 	servers.List[i] = servers.List[j]
-	servers.List[j] = temp;
+	servers.List[j] = temp
 }
 
 func (server *Server) MeasureLatency(times uint, errorLatency time.Duration) time.Duration {

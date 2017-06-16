@@ -1,15 +1,15 @@
 package speedtest
 
 import (
-	"net/http"
+	"encoding/xml"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"log"
+	"net"
+	"net/http"
 	"runtime"
 	"strings"
-	"io"
-	"net"
-	"log"
-	"encoding/xml"
-	"io/ioutil"
 	"sync"
 )
 
@@ -52,7 +52,7 @@ func NewClient(opts *Opts) *Client {
 		opts: opts,
 	}
 
-	return client;
+	return client
 }
 
 func (client *Client) NewRequest(method string, url string, body io.Reader) (*http.Request, error) {
@@ -72,7 +72,7 @@ func (client *Client) NewRequest(method string, url string, body io.Reader) (*ht
 				fmt.Sprintf("Go/%s", runtime.Version()) +
 				fmt.Sprintf("(KHTML, like Gecko) speedtest-cli/%s", Version))
 	}
-	return req, err;
+	return req, err
 }
 
 func (client *Client) Get(url string) (resp *Response, err error) {
@@ -83,7 +83,7 @@ func (client *Client) Get(url string) (resp *Response, err error) {
 
 	htResp, err := client.Client.Do(req)
 
-	return (*Response)(htResp), err;
+	return (*Response)(htResp), err
 }
 
 func (client *Client) Post(url string, bodyType string, body io.Reader) (resp *Response, err error) {
@@ -95,25 +95,25 @@ func (client *Client) Post(url string, bodyType string, body io.Reader) (resp *R
 	req.Header.Set("Content-Type", bodyType)
 	htResp, err := client.Client.Do(req)
 
-	return (*Response)(htResp), err;
+	return (*Response)(htResp), err
 }
 
 func (resp *Response) ReadContent() ([]byte, error) {
 	content, err := ioutil.ReadAll(resp.Body)
 	cerr := resp.Body.Close()
 	if err != nil {
-		return nil, err;
+		return nil, err
 	}
 	if cerr != nil {
 		return content, cerr;
 	}
-	return content, nil;
+	return content, nil
 }
 
 func (resp *Response) ReadXML(out interface{}) error {
 	content, err := resp.ReadContent()
 	if err != nil {
-		return err;
+		return err
 	}
 	return xml.Unmarshal(content, out)
 }

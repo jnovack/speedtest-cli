@@ -1,12 +1,12 @@
 package speedtest
 
 import (
-	"time"
-	"os"
-	"log"
-	"io"
-	"strings"
 	"crypto/rand"
+	"io"
+	"log"
+	"os"
+	"strings"
+	"time"
 )
 
 const maxUploadDuration = maxDownloadDuration

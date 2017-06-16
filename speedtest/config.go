@@ -2,9 +2,9 @@ package speedtest
 
 import (
 	"encoding/xml"
-	"strings"
-	"strconv"
 	"log"
+	"strconv"
+	"strings"
 )
 
 type ClientConfig struct {
