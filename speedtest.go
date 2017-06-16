@@ -1,11 +1,14 @@
 package main
 
 import (
-	"github.com/surol/speedtest-cli/speedtest"
-	"fmt"
-	"os"
+	"bytes"
 	"flag"
+	"fmt"
+	"github.com/surol/speedtest-cli/speedtest"
+	"io/ioutil"
 	"log"
+	"net/http"
+	"os"
 	"time"
 )
 
@@ -19,7 +22,10 @@ func usage() {
 }
 
 func main() {
+	var host = flag.String("host", "", "Server where metrics are collected")
+	var port = flag.String("port", "", "Port where sever is listening on")
 	opts := speedtest.ParseOpts()
+	flag.Parse()
 
 	switch {
 	case opts.Help:
@@ -55,6 +61,34 @@ func main() {
 
 	uploadSpeed := server.UploadSpeed()
 	reportSpeed(opts, "Upload", uploadSpeed)
+
+	payload := fmt.Sprintf(`{"metric_name":"download", "value": "%d"}`, downloadSpeed)
+	var jsonStr = []byte(payload)
+	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
+	req, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+
+	httpClient := &http.Client{}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	payload = fmt.Sprintf(`{"metric_name":"upload", "value": "%d"}`, uploadSpeed)
+	jsonStr = []byte(payload)
+	req, err = http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err = httpClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+
+	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
 }
 
 func reportSpeed(opts *speedtest.Opts, prefix string, speed int) {
