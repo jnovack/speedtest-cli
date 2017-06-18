@@ -22,6 +22,7 @@ func usage() {
 }
 
 func main() {
+	var id = flag.String("id", "", "The id for this host (e.g. hostname)")
 	var host = flag.String("host", "", "Server where metrics are collected")
 	var port = flag.String("port", "", "Port where sever is listening on")
 	opts := speedtest.ParseOpts()
@@ -74,7 +75,7 @@ func main() {
 		panic(err)
 	}
 
-	payload = fmt.Sprintf(`{"metric_name":"upload", "value": "%d"}`, uploadSpeed)
+	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
 	jsonStr = []byte(payload)
 	req, err = http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
