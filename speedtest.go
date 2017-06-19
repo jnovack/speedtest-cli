@@ -63,7 +63,7 @@ func main() {
 	uploadSpeed := server.UploadSpeed()
 	reportSpeed(opts, "Upload", uploadSpeed)
 
-	payload := fmt.Sprintf(`{"metric_name":"download", "value": "%d"}`, downloadSpeed)
+	payload := fmt.Sprintf(`{"host": "%s", "metric_name":"download", "value": "%d"}`, *id, downloadSpeed)
 	var jsonStr = []byte(payload)
 	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
 	req, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
