@@ -1,4 +1,5 @@
 .idea
 *.iml
-speedtest-cli-jose
+speedtest-cli-jose*
+speedtest-cli-raspi*
 
