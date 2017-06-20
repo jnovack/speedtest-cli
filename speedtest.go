@@ -63,31 +63,34 @@ func main() {
 	uploadSpeed := server.UploadSpeed()
 	reportSpeed(opts, "Upload", uploadSpeed)
 
-	payload := fmt.Sprintf(`{"host": "%s", "metric_name":"download", "value": "%d"}`, *id, downloadSpeed)
-	var jsonStr = []byte(payload)
-	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
-	req, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
+	if *host == "" {
+		fmt.Print("Done")
+		os.Exit(0)
+	}
 
 	httpClient := &http.Client{}
+	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
+
+	payload := fmt.Sprintf(`{"host": "%s", "metric_name":"latency", "value": "%d"}`, *id, server.Latency)
+	post(*httpClient, targetURL, payload)
+
+	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"download", "value": "%d"}`, *id, downloadSpeed)
+	post(*httpClient, targetURL, payload)
+
+	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
+	post(*httpClient, targetURL, payload)
+}
+
+func post(httpClient http.Client, targetUrl, payload string) {
+	jsonStr := []byte(payload)
+	fmt.Printf("Posting %s", jsonStr)
+	req, err := http.NewRequest("POST", targetUrl, bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
 	resp, err := httpClient.Do(req)
 	if err != nil {
 		panic(err)
 	}
-
-	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
-	jsonStr = []byte(payload)
-	req, err = http.NewRequest("POST", targetURL, bytes.NewBuffer(jsonStr))
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err = httpClient.Do(req)
-	if err != nil {
-		panic(err)
-	}
-
 	defer resp.Body.Close()
-
-	fmt.Println("response Status:", resp.Status)
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 }
