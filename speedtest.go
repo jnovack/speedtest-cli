@@ -79,6 +79,8 @@ func main() {
 
 	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
 	post(*httpClient, targetURL, payload)
+
+	time.Sleep(30 * time.Minute)
 }
 
 func post(httpClient http.Client, targetUrl, payload string) {
