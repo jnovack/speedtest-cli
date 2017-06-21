@@ -9,6 +9,7 @@ RUN rm -rf /var/lib/apt/lists/*
 COPY . /go/src
 
 WORKDIR /go/src
+RUN go get "github.com/surol/speedtest-cli/speedtest"
 RUN go build -o speedtest-cli speedtest.go
 
 CMD ["/go/src/speedtest-cli", "-bytes", "-id", "raspi3", "-host", "dockerhub.us", "-port", "7676", "-server", "10546"]
