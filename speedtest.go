@@ -68,11 +68,9 @@ func main() {
 		post(*httpClient, targetURL, payload)
 	}
 
-	fmt.Println(server.String())
-
 	if opts.Download {
 		downloadSpeed = server.DownloadSpeed()
-		// reportSpeed(opts, "Download", downloadSpeed)
+		reportSpeed(opts, "Download", downloadSpeed)
 		if *host != "" {
 			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "download", downloadSpeed, server.JSON())
 			post(*httpClient, targetURL, payload)
@@ -81,7 +79,7 @@ func main() {
 
 	if opts.Upload {
 		uploadSpeed = server.UploadSpeed()
-		// reportSpeed(opts, "Upload", uploadSpeed)
+		reportSpeed(opts, "Upload", uploadSpeed)
 		if *host != "" {
 			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "upload", uploadSpeed, server.JSON())
 			post(*httpClient, targetURL, payload)
@@ -101,10 +99,12 @@ func post(httpClient http.Client, targetUrl, payload string) {
 }
 
 func reportSpeed(opts *speedtest.Opts, prefix string, speed int) {
-	if opts.SpeedInBytes {
-		fmt.Printf("%s: %.2f MiB/s\n", prefix, float64(speed)/(1<<20))
-	} else {
-		fmt.Printf("%s: %.2f Mib/s\n", prefix, float64(speed)/(1<<17))
+	if !opts.Quiet {
+		if opts.SpeedInBytes {
+			fmt.Printf("%s: %.2f MiB/s\n", prefix, float64(speed)/(1<<20))
+		} else {
+			fmt.Printf("%s: %.2f Mib/s\n", prefix, float64(speed)/(1<<17))
+		}
 	}
 }
 
@@ -132,9 +132,7 @@ func selectServer(opts *speedtest.Opts, client *speedtest.Client) (selected *spe
 			speedtest.DefaultErrorLatency).First()
 	}
 
-	if opts.Quiet {
-		log.Printf("Ping: %d ms\n", selected.Latency/time.Millisecond)
-	} else {
+	if !opts.Quiet {
 		client.Log("Hosted by %s (%s) [%.2f km]: %d ms\n",
 			selected.Sponsor,
 			selected.Name,
