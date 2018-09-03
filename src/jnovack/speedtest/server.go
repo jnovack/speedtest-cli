@@ -177,7 +177,9 @@ func (client *Client) loadServers() {
 	configChan := make(chan ConfigRef)
 	client.LoadConfig(configChan)
 
-	client.Log("Retrieving speedtest.net server list...")
+	if client.opts.Verbose {
+		client.Log("Retrieving speedtest.net server list...")
+	}
 
 	serversChan := make(chan *Servers, len(serverURLs))
 	for _, url := range serverURLs {
