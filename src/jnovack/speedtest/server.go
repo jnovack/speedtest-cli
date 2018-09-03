@@ -21,9 +21,9 @@ type Server struct {
 	ID       ServerID      `xml:"id,attr"`
 	URL2     string        `xml:"url2,attr"`
 	Host     string        `xml:"host,attr"`
-	client   *Client       `xml:"-"`
 	Distance float64       `xml:"-"`
 	Latency  time.Duration `xml:"-"`
+	client   *Client       `xml:"-"`
 }
 
 func (s *Server) String() string {

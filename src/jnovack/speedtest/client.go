@@ -26,7 +26,7 @@ type Response http.Response
 
 func NewClient(opts *Opts) *Client {
 	dialer := &net.Dialer{
-		Timeout: opts.Timeout,
+		Timeout:   opts.Timeout,
 		KeepAlive: opts.Timeout,
 	}
 
@@ -38,16 +38,16 @@ func NewClient(opts *Opts) *Client {
 	}
 
 	transport := &http.Transport{
-		Proxy: http.ProxyFromEnvironment,
-		Dial: dialer.Dial,
-		TLSHandshakeTimeout: opts.Timeout,
+		Proxy:                 http.ProxyFromEnvironment,
+		Dial:                  dialer.Dial,
+		TLSHandshakeTimeout:   opts.Timeout,
 		ExpectContinueTimeout: opts.Timeout,
 	}
 
 	client := &Client{
 		Client: http.Client{
 			Transport: transport,
-			Timeout: opts.Timeout,
+			Timeout:   opts.Timeout,
 		},
 		opts: opts,
 	}
@@ -63,20 +63,20 @@ func (client *Client) NewRequest(method string, url string, body io.Reader) (*ht
 			url = "http" + url
 		}
 	}
-	req, err := http.NewRequest(method, url, body);
+	req, err := http.NewRequest(method, url, body)
 	if err == nil {
 		req.Header.Set(
 			"User-Agent",
-			"Mozilla/5.0 " +
-				fmt.Sprintf("(%s; U; %s; en-us)", runtime.GOOS, runtime.GOARCH) +
-				fmt.Sprintf("Go/%s", runtime.Version()) +
+			"Mozilla/5.0 "+
+				fmt.Sprintf("(%s; U; %s; en-us)", runtime.GOOS, runtime.GOARCH)+
+				fmt.Sprintf("Go/%s", runtime.Version())+
 				fmt.Sprintf("(KHTML, like Gecko) speedtest-cli/%s", Version))
 	}
 	return req, err
 }
 
 func (client *Client) Get(url string) (resp *Response, err error) {
-	req, err := client.NewRequest("GET", url, nil);
+	req, err := client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (resp *Response) ReadContent() ([]byte, error) {
 		return nil, err
 	}
 	if cerr != nil {
-		return content, cerr;
+		return content, cerr
 	}
 	return content, nil
 }

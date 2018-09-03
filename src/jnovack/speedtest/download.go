@@ -21,7 +21,7 @@ func (client *Client) downloadFile(url string, start time.Time, ret chan int) {
 		ret <- totalRead
 	}()
 
-	if (time.Since(start) > maxDownloadDuration) {
+	if time.Since(start) > maxDownloadDuration {
 		return
 	}
 	if !client.opts.Quiet {

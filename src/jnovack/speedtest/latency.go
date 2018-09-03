@@ -47,7 +47,7 @@ func (servers *serverLatencies) Swap(i, j int) {
 
 func (server *Server) MeasureLatency(times uint, errorLatency time.Duration) time.Duration {
 	server.client.Log("Measuring server latency...\n")
-	return server.doMeasureLatency(times, errorLatency);
+	return server.doMeasureLatency(times, errorLatency)
 }
 
 func (server *Server) doMeasureLatency(times uint, errorLatency time.Duration) time.Duration {
@@ -68,7 +68,7 @@ func (server *Server) measureLatency(errorLatency time.Duration) time.Duration {
 	url := server.RelativeURL("latency.txt")
 	start := time.Now()
 	resp, err := server.client.Get(url)
-	duration := time.Since(start);
+	duration := time.Since(start)
 	if resp != nil {
 		url = resp.Request.URL.String()
 	}
