@@ -37,7 +37,6 @@ func ParseOpts() *Opts {
 	flag.BoolVar(&opts.Secure, "secure", true,
 		"Use HTTPS instead of HTTP when communicating with speedtest.net operated servers")
 	flag.BoolVar(&opts.Help, "help", false, "Show usage information and exit")
-	flag.BoolVar(&opts.Help, "h", false, "Shorthand for -help option")
 	flag.BoolVar(&opts.Version, "version", false, "Show the version number and exit")
 	flag.BoolVar(&opts.Verbose, "verbose", false, "Show all debugging and extraneous information")
 
