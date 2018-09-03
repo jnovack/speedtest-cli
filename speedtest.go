@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"github.com/jnovack/speedtest"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/jnovack/speedtest"
 )
 
 func version() {
