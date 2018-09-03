@@ -24,14 +24,14 @@ func usage() {
 }
 
 func main() {
-	var host = flag.String("host", "", "Server where metrics are collected")
-	var port = flag.String("port", "", "Port where sever is listening on")
 	var downloadSpeed, uploadSpeed int
 
 	var hostname, payload string
 	hostname, err := os.Hostname()
 	var id = flag.String("id", hostname, "The id for this host (e.g. hostname)")
 
+	var host = flag.String("host", "", "Metric server ip address")
+	var port = flag.String("port", "80", "Metric server port")
 	httpClient := &http.Client{}
 	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
 
