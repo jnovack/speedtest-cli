@@ -24,7 +24,7 @@ func (client *Client) downloadFile(url string, start time.Time, ret chan int) {
 	if time.Since(start) > maxDownloadDuration {
 		return
 	}
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		os.Stdout.WriteString(".")
 		os.Stdout.Sync()
 	}
@@ -53,8 +53,7 @@ func (client *Client) downloadFile(url string, start time.Time, ret chan int) {
 func (server *Server) DownloadSpeed() int {
 	client := server.client
 	if !client.opts.Quiet {
-		os.Stdout.WriteString("Testing download speed: ")
-		os.Stdout.Sync()
+		log.Printf("Testing download speed...")
 	}
 
 	starterChan := make(chan int, downloadStreamLimit)

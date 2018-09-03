@@ -52,7 +52,7 @@ func (client *Client) uploadFile(url string, start time.Time, size int, ret chan
 	if time.Since(start) > maxUploadDuration {
 		return
 	}
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		os.Stdout.WriteString(".")
 		os.Stdout.Sync()
 	}
@@ -76,8 +76,7 @@ func (client *Client) uploadFile(url string, start time.Time, size int, ret chan
 func (server *Server) UploadSpeed() int {
 	client := server.client
 	if !client.opts.Quiet {
-		os.Stdout.WriteString("Testing upload speed: ")
-		os.Stdout.Sync()
+		log.Printf("Testing upload speed...")
 	}
 
 	starterChan := make(chan int, uploadStreamLimit)
