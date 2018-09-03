@@ -17,7 +17,9 @@ func (servers *Servers) MeasureLatencies(times uint, errorLatency time.Duration)
 	for _, server := range servers.List {
 		if first {
 			first = false
-			server.client.Log("Measuring server latencies...")
+			if server.client.opts.Verbose {
+				server.client.Log("Measuring server latencies...")
+			}
 		}
 		server.doMeasureLatency(times, errorLatency)
 	}

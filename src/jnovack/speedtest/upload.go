@@ -75,7 +75,7 @@ func (client *Client) uploadFile(url string, start time.Time, size int, ret chan
 
 func (server *Server) UploadSpeed() int {
 	client := server.client
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		log.Printf("Testing upload speed...")
 	}
 
@@ -104,7 +104,7 @@ func (server *Server) UploadSpeed() int {
 		totalSize += int64(<-resultChan)
 	}
 
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		os.Stdout.WriteString("\n")
 		os.Stdout.Sync()
 	}

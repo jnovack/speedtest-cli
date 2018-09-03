@@ -101,9 +101,9 @@ func post(httpClient http.Client, targetUrl, payload string) {
 func reportSpeed(opts *speedtest.Opts, prefix string, speed int) {
 	if !opts.Quiet {
 		if opts.SpeedInBytes {
-			fmt.Printf("%s: %.2f MiB/s\n", prefix, float64(speed)/(1<<20))
+			log.Printf("%s: %.2f MB/s\n", prefix, float64(speed)/(1<<20))
 		} else {
-			fmt.Printf("%s: %.2f Mib/s\n", prefix, float64(speed)/(1<<17))
+			log.Printf("%s: %.2f Mb/s\n", prefix, float64(speed)/(1<<17))
 		}
 	}
 }

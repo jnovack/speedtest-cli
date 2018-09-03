@@ -65,7 +65,9 @@ func (client *Client) LoadConfig(ret chan ConfigRef) {
 }
 
 func (client *Client) loadConfig() {
-	client.Log("Retrieving speedtest.net configuration...")
+	if client.opts.Verbose {
+		client.Log("Retrieving speedtest.net configuration...")
+	}
 
 	result := ConfigRef{}
 

@@ -52,7 +52,7 @@ func (client *Client) downloadFile(url string, start time.Time, ret chan int) {
 
 func (server *Server) DownloadSpeed() int {
 	client := server.client
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		log.Printf("Testing download speed...")
 	}
 
@@ -81,7 +81,7 @@ func (server *Server) DownloadSpeed() int {
 		totalSize += int64(<-resultChan)
 	}
 
-	if !client.opts.Quiet {
+	if client.opts.Verbose {
 		os.Stdout.WriteString("\n")
 		os.Stdout.Sync()
 	}
