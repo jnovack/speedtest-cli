@@ -60,11 +60,13 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client.Log("Testing from %s (%s)...\n", config.Client.ISP, config.Client.IP)
+	client.Log("Testing from %s (%s)...please be patient.\n", config.Client.IP, config.Client.ISP)
+
+	me := fmt.Sprintf(`{ "hostname": "%s", "ip": "%s", "isp": "%s", "latitude": %.4f, "longitude": %.4f, "country": "%s" }`, *id, config.Client.IP, config.Client.ISP, config.Client.Coordinates.Latitude, config.Client.Coordinates.Longitude, config.Client.Country)
 
 	server := selectServer(opts, client)
 	if *host != "" {
-		payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "latency", server.Latency/time.Millisecond, server.JSON())
+		payload = fmt.Sprintf(`{ "metric": { "name": "%s", "value": %d, "units": "ms" }, "client": %s, "server": %s}`, "latency", server.Latency/time.Millisecond, me, server.JSON())
 		post(*httpClient, targetURL, payload)
 	}
 
@@ -72,7 +74,7 @@ func main() {
 		downloadSpeed = server.DownloadSpeed()
 		reportSpeed(opts, "Download", downloadSpeed)
 		if *host != "" {
-			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "download", downloadSpeed, server.JSON())
+			payload = fmt.Sprintf(`{ "metric": { "name": "%s", "value": %.4f, "units": "Mb" }, "client": "%s", "server": %s}`, "download", float64(downloadSpeed)/(1<<17), me, server.JSON())
 			post(*httpClient, targetURL, payload)
 		}
 	}
@@ -81,7 +83,7 @@ func main() {
 		uploadSpeed = server.UploadSpeed()
 		reportSpeed(opts, "Upload", uploadSpeed)
 		if *host != "" {
-			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "upload", uploadSpeed, server.JSON())
+			payload = fmt.Sprintf(`{ "metric": { "name": "%s", "value": %.4f, "units": "Mb" }, "client": "%s", "server": %s}`, "upload", float64(uploadSpeed)/(1<<17), me, server.JSON())
 			post(*httpClient, targetURL, payload)
 		}
 	}

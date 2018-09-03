@@ -16,6 +16,7 @@ type ClientConfig struct {
 	ISPUploadAverage   uint32  `xml:"ispulavg,attr"`
 	Rating             float32 `xml:"rating,attr"`
 	LoggedIn           uint8   `xml:"loggedin,attr"`
+	Country            string  `xml:"country,attr"`
 }
 
 type ConfigTime struct {
