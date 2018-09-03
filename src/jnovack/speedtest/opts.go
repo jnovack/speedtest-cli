@@ -26,8 +26,8 @@ func ParseOpts() *Opts {
 	flag.BoolVar(&opts.List, "list", false, "Display a list of speedtest.net servers sorted by distance")
 	flag.Uint64Var((*uint64)(&opts.Server), "server", 0, "Specify a server ID to test against")
 	flag.StringVar(&opts.Interface, "interface", "", "IP address of network interface to bind to")
-	flag.DurationVar(&opts.Timeout, "timeout", 10 * time.Second, "HTTP timeout duration. Default 10s")
 	flag.BoolVar(&opts.Secure, "secure", false,
+	flag.DurationVar(&opts.Timeout, "timeout", 10*time.Second, "HTTP timeout duration. Default 10s")
 		"Use HTTPS instead of HTTP when communicating with speedtest.net operated servers")
 	flag.BoolVar(&opts.Help, "help", false, "Show usage information and exit")
 	flag.BoolVar(&opts.Help, "h", false, "Shorthand for -help option")
