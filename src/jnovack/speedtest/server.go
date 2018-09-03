@@ -30,6 +30,10 @@ func (s *Server) String() string {
 	return fmt.Sprintf("%8d: %s (%s, %s) [%.2f km] %s", s.ID, s.Sponsor, s.Name, s.Country, s.Distance, s.URL)
 }
 
+func (s *Server) JSON() string {
+	return fmt.Sprintf(`{ "id": %8d, "sponsor": "%s", "city": "%s", "country": "%s", "distance": %.2f, "url": "%s", "host": "%s", "latency": %d }`, s.ID, s.Sponsor, s.Name, s.Country, s.Distance, s.URL, s.Host, s.Latency/time.Millisecond)
+}
+
 func (s *Server) RelativeURL(local string) string {
 	u, err := url.Parse(s.URL)
 	if err != nil {
