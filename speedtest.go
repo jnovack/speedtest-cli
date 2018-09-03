@@ -118,7 +118,7 @@ func selectServer(opts *speedtest.Opts, client *speedtest.Client) (selected *spe
 	if opts.Server != 0 {
 		servers, err := client.AllServers()
 		if err != nil {
-			log.Fatal("Failed to load server list: %v\n", err)
+			log.Fatalf("Failed to load server list: %v\n", err)
 			return nil
 		}
 		selected = servers.Find(opts.Server)
@@ -130,7 +130,7 @@ func selectServer(opts *speedtest.Opts, client *speedtest.Client) (selected *spe
 	} else {
 		servers, err := client.ClosestServers()
 		if err != nil {
-			log.Fatal("Failed to load server list: %v\n", err)
+			log.Fatalf("Failed to load server list: %v\n", err)
 			return nil
 		}
 		selected = servers.MeasureLatencies(
