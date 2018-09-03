@@ -23,9 +23,15 @@ func usage() {
 func main() {
 	var host = flag.String("host", "", "Server where metrics are collected")
 	var port = flag.String("port", "", "Port where sever is listening on")
+	var downloadSpeed, uploadSpeed int
+
 	var hostname, payload string
 	hostname, err := os.Hostname()
 	var id = flag.String("id", hostname, "The id for this host (e.g. hostname)")
+
+	httpClient := &http.Client{}
+	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
+
 	opts := speedtest.ParseOpts()
 	flag.Parse()
 
@@ -56,31 +62,31 @@ func main() {
 
 	client.Log("Testing from %s (%s)...\n", config.Client.ISP, config.Client.IP)
 
-	server := selectServer(opts, client);
-
-	downloadSpeed := server.DownloadSpeed()
-	reportSpeed(opts, "Download", downloadSpeed)
-
-	uploadSpeed := server.UploadSpeed()
-	reportSpeed(opts, "Upload", uploadSpeed)
-
-	if *host == "" {
-		fmt.Print("Done")
-		os.Exit(0)
+	server := selectServer(opts, client)
+	if *host != "" {
+		payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "latency", server.Latency, server.JSON())
+		post(*httpClient, targetURL, payload)
 	}
 
-	httpClient := &http.Client{}
-	targetURL := fmt.Sprintf("http://%s:%s/public/metrics", *host, *port)
+	fmt.Println(server.String())
 
-	payload := fmt.Sprintf(`{"host": "%s", "metric_name":"latency", "value": "%d"}`, *id, server.Latency)
-	post(*httpClient, targetURL, payload)
+	if opts.Download {
+		downloadSpeed = server.DownloadSpeed()
+		// reportSpeed(opts, "Download", downloadSpeed)
+		if *host != "" {
+			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "download", downloadSpeed, server.JSON())
+			post(*httpClient, targetURL, payload)
+		}
+	}
 
-	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"download", "value": "%d"}`, *id, downloadSpeed)
-	post(*httpClient, targetURL, payload)
-
-	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
-	post(*httpClient, targetURL, payload)
-
+	if opts.Upload {
+		uploadSpeed = server.UploadSpeed()
+		// reportSpeed(opts, "Upload", uploadSpeed)
+		if *host != "" {
+			payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "upload", uploadSpeed, server.JSON())
+			post(*httpClient, targetURL, payload)
+		}
+	}
 }
 
 func post(httpClient http.Client, targetUrl, payload string) {
