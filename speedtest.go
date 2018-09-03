@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"jnovack/speedtest"
 	"log"
 	"net/http"
@@ -80,12 +79,10 @@ func main() {
 	payload = fmt.Sprintf(`{"host": "%s", "metric_name":"upload", "value": "%d"}`, *id, uploadSpeed)
 	post(*httpClient, targetURL, payload)
 
-	time.Sleep(30 * time.Minute)
 }
 
 func post(httpClient http.Client, targetUrl, payload string) {
 	jsonStr := []byte(payload)
-	fmt.Printf("Posting %s", jsonStr)
 	req, err := http.NewRequest("POST", targetUrl, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := httpClient.Do(req)
@@ -93,8 +90,6 @@ func post(httpClient http.Client, targetUrl, payload string) {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
 }
 
 func reportSpeed(opts *speedtest.Opts, prefix string, speed int) {
