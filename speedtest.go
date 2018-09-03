@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"jnovack/speedtest"
+	"github.com/jnovack/speedtest"
 	"log"
 	"net/http"
 	"os"
