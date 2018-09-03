@@ -14,8 +14,8 @@ type ClientConfig struct {
 	ISPRating          float32 `xml:"isprating,attr"`
 	ISPDownloadAverage uint32  `xml:"ispdlavg,attr"`
 	ISPUploadAverage   uint32  `xml:"ispulavg,attr"`
-	Rating   float32 `xml:"rating,attr"`
-	LoggedIn uint8   `xml:"loggedin,attr"`
+	Rating             float32 `xml:"rating,attr"`
+	LoggedIn           uint8   `xml:"loggedin,attr"`
 }
 
 type ConfigTime struct {
