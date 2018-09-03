@@ -17,6 +17,8 @@ clean:
 		$(GOCLEAN)
 		rm -f $(BINARY_NAME)
 		rm -f $(BINARY_LINUX)
+		rm -f $(BINARY_ARM5)
+		rm -f $(BINARY_ARM7)
 run:
 		$(GOBUILD) -o $(BINARY_NAME) -v ./...
 		./$(BINARY_NAME)
