@@ -13,11 +13,14 @@ import (
 
 func version() {
 	fmt.Print(speedtest.Version)
+	os.Exit(0)
 }
 
 func usage() {
+	fmt.Fprintf(os.Stderr, "speedtest %s\n", speedtest.Version)
 	fmt.Fprint(os.Stderr, "Command line interface for testing internet bandwidth using speedtest.net.\n\n")
 	flag.PrintDefaults()
+	os.Exit(0)
 }
 
 func main() {
