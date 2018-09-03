@@ -21,9 +21,11 @@ func usage() {
 }
 
 func main() {
-	var id = flag.String("id", "", "The id for this host (e.g. hostname)")
 	var host = flag.String("host", "", "Server where metrics are collected")
 	var port = flag.String("port", "", "Port where sever is listening on")
+	var hostname, payload string
+	hostname, err := os.Hostname()
+	var id = flag.String("id", hostname, "The id for this host (e.g. hostname)")
 	opts := speedtest.ParseOpts()
 	flag.Parse()
 
