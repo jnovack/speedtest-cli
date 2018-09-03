@@ -64,7 +64,7 @@ func main() {
 
 	server := selectServer(opts, client)
 	if *host != "" {
-		payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "latency", server.Latency, server.JSON())
+		payload = fmt.Sprintf(`{"host": "%s", "metric_name":"%s", "value": "%d", "server": %s}`, *id, "latency", server.Latency/time.Millisecond, server.JSON())
 		post(*httpClient, targetURL, payload)
 	}
 
