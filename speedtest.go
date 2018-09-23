@@ -68,7 +68,14 @@ func main() {
 
 	me := fmt.Sprintf(`{ "hostname": "%s", "ip": "%s", "isp": "%s", "latitude": %.4f, "longitude": %.4f, "country": "%s" }`, *id, config.Client.IP, config.Client.ISP, config.Client.Coordinates.Latitude, config.Client.Coordinates.Longitude, config.Client.Country)
 
-	server := selectServer(opts, client)
+	server := client.SelectServer(opts)
+
+	log.Printf("Hosted by %s (%s) [%.2f km]: %d ms\n",
+		server.Sponsor,
+		server.Name,
+		server.Distance,
+		server.Latency/time.Millisecond)
+
 	if *host != "" {
 		payload = fmt.Sprintf(`{ "metric": { "name": "%s", "value": %d, "units": "ms" }, "client": %s, "server": %s}`, "latency", server.Latency/time.Millisecond, me, server.JSON())
 		post(*httpClient, targetURL, payload)
@@ -114,6 +121,7 @@ func reportSpeed(opts *speedtest.Opts, prefix string, speed int) {
 	}
 }
 
+/*
 func selectServer(opts *speedtest.Opts, client *speedtest.Client) (selected *speedtest.Server) {
 	if opts.Server != 0 {
 		servers, err := client.AllServers()
@@ -148,3 +156,4 @@ func selectServer(opts *speedtest.Opts, client *speedtest.Client) (selected *spe
 
 	return selected
 }
+*/
